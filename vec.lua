@@ -5,12 +5,12 @@
 
 local vec = require 'vec' -- or whatever the filename for this library is
 
-/////           /////     vec(x) -> {x,x,x}            | automatically fills up to vec3
-/////           /////     vec(x,y) -> {x,x,x,x}        | there is not much need in vec2 in love2d, so i replaced it with axis filling 
-/////////////////////     vec{x,y} -> {x,y}            | but you can still do vec2 if you want using curly brackets
-/////////////////////     print(vec(1/3, 5, 10)) >> vec(3.33, 5.00, 10.00) | string conversion
-/////           /////     vec(10,4)*10 -> vec(100, 100, 100)               | supports any operators for  vec x num  and  vec x vec
-/////           /////     vec(x,y,z,w,...) -> {x,y,z,w,...}
+/////          /////     vec(x) -> {x,x,x}            | automatically fills up to vec3
+/////          /////     vec(x,y) -> {x,x,x,x}        | there is not much need in vec2 in love2d, so i replaced it with axis filling 
+////////////////////     vec{x,y} -> {x,y}            | but you can still do vec2 if you want using curly brackets
+////////////////////     print(vec(1/3, 5, 10)) >> vec(3.33, 5.00, 10.00) | string conversion
+/////          /////     vec(10,4)*10 -> vec(100, 100, 100)               | supports any operators for  vec x num  and  vec x vec
+/////          /////     vec(x,y,z,w,...) -> {x,y,z,w,...}
 
 functions:
 vec.random(axes, from, to)      | fills a vector using love.math.random (or math.random if used outside love2d)
@@ -27,6 +27,7 @@ comparisons ( <, >, <=, >= ) are comparing vectors by their length
 comparison ( ==, ~= ) are comparing every component of the vector, if one is different then stops and returns the result
 
 operations between vectors with different amount of axes are done so the result vector size will be equal to first (A vector)
+// actually, it depends. TODO tomorrow: think about this sh*t, stretch out the shortest vec
 
     EXAMPLE (enable console):
 
@@ -70,7 +71,7 @@ operations between vectors with different amount of axes are done so the result 
 
 ]]--
 
--- this sucks as f*ck but slightly improves performance (https://www.lua.org/gems/sample.pdf page 17)
+-- this sucks but slightly improves performance (https://www.lua.org/gems/sample.pdf page 17)
 local ipairs = ipairs
 local type = type
 local setmetatable = setmetatable
@@ -98,7 +99,7 @@ local function vconv(a, b)
     return a, false
 end
 local function map(a, b, applied, nilTo)
-    local nilTo = nilTo and 1 or 0
+    local nilTo = (nilTo ~= nil) and nilTo or 0
     local new = {}
     a, _ = vconv(a, b)
     b, bc = vconv(b, a)
@@ -117,7 +118,8 @@ local vec = {
     __sub = function(a, b) return map(a, b, function(aa, bb) return aa - bb end) end,
     __div = function(a, b) return map(a, b, function(aa, bb) return aa / bb end, 1) end,
     __pow = function(a, b) return map(a, b, function(aa, bb) return aa ^ bb end) end,
-    __unm = function(a) return map(a, -1, function(aa, bb) return aa * bb end) end,
+    __unm = function(a)    return map(a, -1, function(aa, bb) return aa * bb end) end,
+    
     __le =  function(a, b) return len1(a) <= len1(b) end,
     __lt =  function(a, b) return len1(a) <  len1(b) end,
     __eq =  function(a, b)
@@ -184,6 +186,7 @@ end
 function vec:lerp(b, t)
     return self:map(lerp, b, t)
 end
+
 return setmetatable({
     random = function(axes, a, b)
         local axes = axes or 3
