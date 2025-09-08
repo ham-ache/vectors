@@ -25,11 +25,9 @@ logic:
 operators +, *, -, /, ^ and negation (unary minus) are mapped through all components
 comparisons ( <, >, <=, >= ) are comparing vectors by their length
 comparison ( ==, ~= ) are comparing every component of the vector, if one is different then stops and returns the result
+operations between vectors with different axes stretch the result to the biggest vector
 
-operations between vectors with different amount of axes are done so the result vector size will be equal to first (A vector)
-// actually, it depends. TODO tomorrow: think about this sh*t, stretch out the shortest vec
-
-    EXAMPLE (enable console):
+EXAMPLE (enable console):
 
     vec = require 'vec'
     local function println(...)
@@ -77,7 +75,7 @@ local type = type
 local setmetatable = setmetatable
 local getmetatable = getmetatable
 
-local rand = love.math.random or math.random
+local rand = (love and love.math and love.math.random) or math.random
 
 local function lerp(a,b,t) return (1-t)*a + t*b end
 local function len1(v)
@@ -101,13 +99,12 @@ end
 local function map(a, b, applied, nilTo)
     local nilTo = (nilTo ~= nil) and nilTo or 0
     local new = {}
-    a, _ = vconv(a, b)
+    a, _  = vconv(a, b)
     b, bc = vconv(b, a)
-    for axis, val in ipairs(b) do
-        a[axis] = (a[axis] ~= nil) and a[axis] or nilTo
-        val = (val ~= nil) and val or nilTo
-        
-        new[axis] = applied(a[axis], val)
+    for x = 1, (#a > #b and #a or #b) do
+        local aval = (a[x] ~= nil) and a[x] or nilTo
+        local bval = (b[x] ~= nil) and b[x] or nilTo
+        new[x] = applied(aval, bval)
     end
     return setmetatable(new, getmetatable(bc and a or b))
 end
@@ -192,7 +189,7 @@ return setmetatable({
         local axes = axes or 3
         local res = {}
         for x = 1, axes do
-            table.insert(res, rand(a, b))
+            res[x] = rand(a, b)
         end
         return setmetatable(res, vec)
     end
@@ -209,7 +206,7 @@ return setmetatable({
         local sval = args[2]
         args = {}
         for x = 1, sval do 
-            table.insert(args, fval)
+            args[x] = fval
         end
     end
     return setmetatable(args, vec)
