@@ -7,19 +7,19 @@
 
 ## functions:
 ### `vec.random(axes, from, to)`
-fills a vector using love.math.random (or math.random if used outside love2d)
+###### fills a vector using love.math.random (or math.random if used outside love2d)
 ### `vec:dot(b)`
-dot product for vecA and vecB
+###### dot product for vecA and vecB
 ### `vec:len()`
-returns vector's length
+###### returns vector's length
 ### `vec:cross(b)`
-cross product, supports only vec3
+###### cross product, supports only vec3
 ### `vec:norm()`
-returns a normalized vector
+###### returns a normalized vector
 ### `vec:map(func, b, ...)`
-maps a function for every vector's component. can be used along with vector b and other args
+###### maps a function for every vector's component. can be used along with vector b and other args
 ### `vec:lerp(b, t)`
-linear interpolation between vecA and vecB at t fraction
+###### linear interpolation between vecA and vecB at t fraction
 
 ## examples and explanations:
 ### `vec(x) -> {x,x,x}` automatically fills up to vec3
