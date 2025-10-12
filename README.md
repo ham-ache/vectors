@@ -1,4 +1,9 @@
 # hamache's flexible love2d vectors.
+```lua
+local vec = require 'vec' -- or whatever the filename is, will be referenced as vec in description below
+```
+- create one using vec(x, y, z, w, ...)
+
 ## logic notes:
 - operators +, *, -, /, ^ and negation (unary minus) are mapped through all components
 - comparisons ( <, >, <=, >= ) are comparing vectors by their length
@@ -23,7 +28,7 @@
 
 ## examples and explanations:
 ### `vec(x) -> {x,x,x}` automatically fills up to vec3
-### `vec(x,y) -> {x,x,x,x}` there is not much need in vec2 in love2d, so i replaced it with axis filling 
+### `vec(x,y) -> {x,x,x,x}` there is not much need in vec2 for love2d, so i replaced it with axis filling 
 ### `vec{x,y} -> {x,y}` but you can still do vec2 if you want using curly brackets
 ### `print(vec(1/3, 5, 10)) >> vec(3.33, 5.00, 10.00)`string conversion
 ### `vec(10,4)*10 -> vec(100, 100, 100)` supports any operators for  vec x num  and  vec x vec
