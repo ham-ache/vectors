@@ -1,6 +1,6 @@
 # hamache's flexible love2d vectors.
 ```lua
-local vec = require 'vec' -- or whatever the filename is, will be referenced as vec in description below
+local vec = require 'vec' -- or whatever the filename is, will be referenced as vec below
 ```
 - create one using vec(x, y, z, w, ...)
 
